@@ -33,7 +33,7 @@ from data.utils import update_values
 parser = argparse.ArgumentParser()
 
 # Data input settings
-parser.add_argument('--cfgs_file', default='cfgs/anet.yml', type=str, help='dataset specific settings. anet | yc2')
+parser.add_argument('--cfgs_file', default='cfgs/yc2.yml', type=str, help='dataset specific settings. anet | yc2')
 parser.add_argument('--dataset', default='', type=str, help='which dataset to use. two options: anet | yc2')
 parser.add_argument('--dataset_file', default='', type=str)
 parser.add_argument('--feature_root', default='', type=str, help='the feature root')
@@ -403,10 +403,6 @@ def train(epoch, model, optimizer, train_loader, vis, vis_window, args):
     sample_prob = min(args.sample_prob, int(epoch/5)*0.05)
     for train_iter, data in enumerate(train_loader):
         (img_batch, tempo_seg_pos, tempo_seg_neg, sentence_batch) = data
-        img_batch = Variable(img_batch)
-        tempo_seg_pos = Variable(tempo_seg_pos)
-        tempo_seg_neg = Variable(tempo_seg_neg)
-        sentence_batch = Variable(sentence_batch)
 
         if args.cuda:
             img_batch = img_batch.cuda()
@@ -505,10 +501,6 @@ def valid(model, loader):
     for iter, data in enumerate(loader):
         (img_batch, tempo_seg_pos, tempo_seg_neg, sentence_batch) = data
         with torch.no_grad():
-            img_batch = Variable(img_batch)
-            tempo_seg_pos = Variable(tempo_seg_pos)
-            tempo_seg_neg = Variable(tempo_seg_neg)
-            sentence_batch = Variable(sentence_batch)
 
             if args.cuda:
                 img_batch = img_batch.cuda()
