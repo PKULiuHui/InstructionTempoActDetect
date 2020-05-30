@@ -1,3 +1,7 @@
+# Unused data files
+tools/densevid_eval/coco-caption/annotations
+tools/densevid_eval/coco-caption/pycocoevalcap/meteor/data
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
