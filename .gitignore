@@ -3,7 +3,8 @@ tools/densevid_eval/coco-caption/annotations
 tools/densevid_eval/coco-caption/pycocoevalcap/meteor/data
 
 # .idea
-.idea/
+.idea
+.idea/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
