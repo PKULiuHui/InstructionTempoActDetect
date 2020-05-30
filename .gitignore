@@ -1,6 +1,7 @@
-# Unused data files
+# Data files
 tools/densevid_eval/coco-caption/annotations
 tools/densevid_eval/coco-caption/pycocoevalcap/meteor/data
+dataset/*
 
 # .idea
 .idea
