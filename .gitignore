@@ -1,7 +1,9 @@
-# Data files
+# Project specific files to ignore
 tools/densevid_eval/coco-caption/annotations
 tools/densevid_eval/coco-caption/pycocoevalcap/meteor/data
 dataset/*
+checkpoint/*
+*_backup.py
 
 # .idea
 .idea
