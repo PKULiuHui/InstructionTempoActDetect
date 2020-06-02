@@ -5,88 +5,25 @@
  For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 """
 
-# general packages
-import os
-import argparse
-import numpy as np
-from collections import defaultdict
 import json
-import subprocess
-import csv
-import yaml
+import os
+import time
+import multiprocessing as mp
 
-# torch
+import numpy as np
 import torch
-from torch.autograd import Variable
 from torch.utils.data import DataLoader
 
-# misc
-from data.anet_test_dataset import ANetTestDataset, anet_test_collate_fn
-from data.anet_dataset import get_vocab_and_sentences
-from model.action_prop_dense_cap import ActionPropDenseCap
 from tools.eval_proposal_anet import ANETproposal
-from data.utils import update_values
+from data.anet_dataset import ANetDataset, get_vocab_and_sentences
+from data.utils import iou_with_anchors
+from model.bmn import BMN
+from opt import parse_opt
 
-parser = argparse.ArgumentParser()
-
-# Data input settings
-parser.add_argument('--cfgs_file', default='cfgs/anet.yml', type=str, help='dataset specific settings. anet | yc2')
-parser.add_argument('--dataset', default='', type=str, help='which dataset to use. two options: anet | yc2')
-parser.add_argument('--dataset_file', default='', type=str)
-parser.add_argument('--feature_root', default='', type=str, help='the feature root')
-parser.add_argument('--dur_file', default='', type=str)
-parser.add_argument('--val_data_folder', default='validation', help='validation data folder')
-parser.add_argument('--densecap_eval_file', default='/z/subsystem/densevid_eval/evaluate.py')
-parser.add_argument('--densecap_references', default='', type=str)
-parser.add_argument('--start_from', default='', help='path to a model checkpoint to initialize model weights from. Empty = dont')
-parser.add_argument('--max_sentence_len', default=20, type=int)
-parser.add_argument('--num_workers', default=2, type=int)
-
-# Model settings: General
-parser.add_argument('--d_model', default=1024, type=int, help='size of the rnn in number of hidden nodes in each layer')
-parser.add_argument('--d_hidden', default=2048, type=int)
-parser.add_argument('--n_heads', default=8, type=int)
-parser.add_argument('--in_emb_dropout', default=0.1, type=float)
-parser.add_argument('--attn_dropout', default=0.2, type=float)
-parser.add_argument('--vis_emb_dropout', default=0.1, type=float)
-parser.add_argument('--cap_dropout', default=0.2, type=float)
-parser.add_argument('--image_feat_size', default=3072, type=int, help='the encoding size of the image feature')
-parser.add_argument('--n_layers', default=2, type=int, help='number of layers in the sequence model')
-
-# Model settings: Proposal and mask
-parser.add_argument('--slide_window_size', default=480, type=int, help='the (temporal) size of the sliding window')
-parser.add_argument('--slide_window_stride', default=20, type=int, help='the step size of the sliding window')
-parser.add_argument('--sampling_sec', default=0.5, help='sample frame (RGB and optical flow) with which time interval')
-parser.add_argument('--kernel_list', default=[1, 2, 3, 4, 5, 7, 9, 11, 15, 21, 29, 41, 57, 71, 111, 161, 211, 251],
-                    type=int, nargs='+')
-parser.add_argument('--max_prop_num', default=500, type=int, help='the maximum number of proposals per video')
-parser.add_argument('--min_prop_num', default=50, type=int, help='the minimum number of proposals per video')
-parser.add_argument('--min_prop_before_nms', default=200, type=int, help='the minimum number of proposals per video')
-parser.add_argument('--pos_thresh', default=0.7, type=float)
-parser.add_argument('--stride_factor', default=50, type=int, help='the proposal temporal conv kernel stride is determined by math.ceil(kernel_len/stride_factor)')
-
-parser.add_argument('--gated_mask', action='store_true', dest='gated_mask')
-parser.add_argument('--learn_mask', action='store_true', dest='learn_mask')
-
-# Optimization: General
-parser.add_argument('--batch_size', default=1, type=int, help='what is the batch size in number of images per batch? (there will be x seq_per_img sentences)')
-parser.add_argument('--cuda', dest='cuda', action='store_true', help='use gpu')
-parser.add_argument('--id', default='', help='an id identifying this run/job. used in cross-val and appended when writing progress files')
-
-
-parser.set_defaults(cuda=False, learn_mask=False, gated_mask=False)
-
-args = parser.parse_args()
-
-with open(args.cfgs_file, 'r') as handle:
-    options_yaml = yaml.load(handle)
-update_values(options_yaml, vars(args))
+args = parse_opt(train=False)
+args.batch_size = 1
+args.num_workers = 3
 print(args)
-
-# arguments inspection
-assert args.batch_size == 1, "Batch size has to be 1!"
-if args.slide_window_size < args.slide_window_stride:
-    raise Exception("arguments insepection failed!")
 
 
 def get_dataset(args):
@@ -94,40 +31,21 @@ def get_dataset(args):
     text_proc, raw_data = get_vocab_and_sentences(args.dataset_file, args.max_sentence_len)
 
     # Create the dataset and data loader instance
-    test_dataset = ANetTestDataset(args.feature_root,
-                                   args.slide_window_size,
-                                   text_proc, raw_data, args.val_data_folder,
-                                   learn_mask=args.learn_mask)
+    test_dataset = ANetDataset(args, args.test_data_folder, text_proc, raw_data, test=True)
 
-    test_loader = DataLoader(test_dataset,
-                             batch_size=args.batch_size,
-                             shuffle=False, num_workers=args.num_workers,
-                             collate_fn=anet_test_collate_fn)
+    test_loader = DataLoader(test_dataset, batch_size=1,
+                             shuffle=False, num_workers=args.num_workers)
 
     return test_loader, text_proc
 
 
 def get_model(text_proc, args):
-    sent_vocab = text_proc.vocab
-    model = ActionPropDenseCap(d_model=args.d_model,
-                               d_hidden=args.d_hidden,
-                               n_layers=args.n_layers,
-                               n_heads=args.n_heads,
-                               vocab=sent_vocab,
-                               in_emb_dropout=args.in_emb_dropout,
-                               attn_dropout=args.attn_dropout,
-                               vis_emb_dropout=args.vis_emb_dropout,
-                               cap_dropout=args.cap_dropout,
-                               nsamples=0,
-                               kernel_list=args.kernel_list,
-                               stride_factor=args.stride_factor,
-                               learn_mask=args.learn_mask)
+    model = BMN(args)
 
     # Initialize the networks and the criterion
     if len(args.start_from) > 0:
         print("Initializing weights from {}".format(args.start_from))
-        model.load_state_dict(torch.load(args.start_from,
-                                              map_location=lambda storage, location: storage))
+        model.load_state_dict(torch.load(args.start_from, map_location=lambda storage, location: storage))
 
     # Ship the model to GPU, maybe
     if args.cuda:
@@ -136,102 +54,151 @@ def get_model(text_proc, args):
     return model
 
 
+def soft_nms(prop, alpha, t1, t2):
+    '''
+    prop: proposals generated by network, (score, start, end) for each row;
+    alpha: alpha value of Gaussian decaying function;
+    t1, t2: threshold for soft nms.
+    '''
+    idx = np.argsort(-prop[:,0], axis=0)
+    prop = prop[idx]
+    tscore, tstart, tend = map(list, [prop[:, 0], prop[:, 1], prop[:, 2]])
+
+    rstart = []
+    rend = []
+    rscore = []
+
+    while len(tscore) > 1 and len(rscore) < 101:
+        max_index = tscore.index(max(tscore))
+        tmp_iou_list = iou_with_anchors(
+            np.array(tstart),
+            np.array(tend), tstart[max_index], tend[max_index])
+        for idx in range(0, len(tscore)):
+            if idx != max_index:
+                tmp_iou = tmp_iou_list[idx]
+                tmp_width = tend[max_index] - tstart[max_index]
+                if tmp_iou > t1 + (t2 - t1) * tmp_width:
+                    tscore[idx] = tscore[idx] * np.exp(-np.square(tmp_iou) / alpha)
+
+        rstart.append(tstart[max_index])
+        rend.append(tend[max_index])
+        rscore.append(tscore[max_index])
+        tstart.pop(max_index)
+        tend.pop(max_index)
+        tscore.pop(max_index)
+
+    newprop = np.stack([rscore, rstart, rend]).transpose()
+    return newprop
+
+
+def video_post_process(args, prop, video_info):
+    #prop: score, start, end
+    if len(prop) > 1:
+        snms_alpha = args.soft_nms_alpha
+        snms_t1 = args.soft_nms_low_thres
+        snms_t2 = args.soft_nms_high_thres
+        prop = soft_nms(prop, snms_alpha, snms_t1, snms_t2)
+
+    idx = np.argsort(-prop[:, 0], axis=0)
+    prop = prop[idx]
+    video_duration = float(video_info["duration_frame"] // 16 * 16) / video_info["duration_frame"] * video_info[
+        "duration_second"]
+    proposal_list = []
+
+    for j in range(min(100, len(prop))):
+        tmp_proposal = {"score": prop[j,0],
+                        "segment": [max(0, prop[j,1]) * video_duration, min(1, prop[j,2]) * video_duration]}
+        proposal_list.append(tmp_proposal)
+
+    return proposal_list
+
+
 ### Validation ##
-def validate(model, loader, args):
-    model.eval()
-    densecap_result = defaultdict(list)
-    prop_result = defaultdict(list)
-
-    avg_prop_num = 0
-
-    frame_to_second = {}
+def inference(model, loader, args):
+    video_dict = dict()
     with open(args.dur_file) as f:
-        if args.dataset == 'anet':
-            for line in f:
-                vid_name, vid_dur, vid_frame = [l.strip() for l in line.split(',')]
-                frame_to_second[vid_name] = float(vid_dur)*int(float(vid_frame)*1./int(float(vid_dur))*args.sampling_sec)*1./float(vid_frame)
-            frame_to_second['_0CqozZun3U'] = args.sampling_sec # a missing video in anet
-        elif args.dataset == 'yc2':
-            import math
-            for line in f:
-                vid_name, vid_dur, vid_frame = [l.strip() for l in line.split(',')]
-                frame_to_second[vid_name] = float(vid_dur)*math.ceil(float(vid_frame)*1./float(vid_dur)*args.sampling_sec)*1./float(vid_frame) # for yc2
-        else:
-            raise NotImplementedError
+        for line in f:
+            name, dur, frame = [l.strip() for l in line.split(',')]
+            video_dict[name] = {'duration_second': float(dur), 'duration_frame': float(frame)}
 
-    for data in loader:
-        image_feat, original_num_frame, video_prefix = data
-        with torch.no_grad():
-            image_feat = Variable(image_feat)
-            # ship data to gpu
+    model.eval()
+    result = dict()
+    tscale = args.temporal_scale
+
+    t_gen, t_nms = 0, 0
+    t0 = time.time()
+
+    with torch.no_grad():
+        for epoch, data in enumerate(loader):
+            vid, sentence, img_feat = data
+            vid = vid[0]
             if args.cuda:
-                image_feat = image_feat.cuda()
+                img_feat = img_feat.cuda()
 
-            dtype = image_feat.data.type()
-            if video_prefix[0].split('/')[-1] not in frame_to_second:
-                frame_to_second[video_prefix[0].split('/')[-1]] = args.sampling_sec
-                print("cannot find frame_to_second for video {}".format(video_prefix[0].split('/')[-1]))
-            sampling_sec = frame_to_second[video_prefix[0].split('/')[-1]] # batch_size has to be 1
-            all_proposal_results = model.inference(image_feat,
-                                                   original_num_frame,
-                                                   sampling_sec,
-                                                   args.min_prop_num,
-                                                   args.max_prop_num,
-                                                   args.min_prop_before_nms,
-                                                   args.pos_thresh,
-                                                   args.stride_factor,
-                                                   gated_mask=args.gated_mask)
+            confidence_map, start_scores, end_scores = map(lambda x: x[0].detach().cpu().numpy(), model(img_feat))
+            reg_confidence, clr_confidence = confidence_map
 
-            for b in range(len(video_prefix)):
-                vid = video_prefix[b].split('/')[-1]
-                print('Write results for video: {}'.format(vid))
-                for pred_start, pred_end, pred_s, sent in all_proposal_results[b]:
-                    densecap_result['v_'+vid].append(
-                        {'sentence':sent,
-                         'timestamp':[pred_start * sampling_sec,
-                                      pred_end * sampling_sec]})
+            max_start = max(start_scores)
+            max_end = max(end_scores)
 
-                    prop_result[vid].append(
-                        {'segment':[pred_start * sampling_sec,
-                                    pred_end * sampling_sec],
-                         'score':pred_s})
+            # generate the set of start points and end points
+            start_bins = np.zeros(len(start_scores))
+            start_bins[0] = 1  # [1,0,0...,0,1] 首末两帧
+            for idx in range(1, tscale - 1):
+                if start_scores[idx] > min(max(start_scores[idx + 1], start_scores[idx - 1]), 0.5 * max_start):
+                    start_bins[idx] = 1
+            end_bins = np.zeros(len(end_scores))
+            end_bins[-1] = 1
+            for idx in range(1, tscale - 1):
+                if end_scores[idx] > min(max(end_scores[idx + 1], end_scores[idx - 1]), 0.5 * max_end):
+                    end_bins[idx] = 1
 
-                avg_prop_num += len(all_proposal_results[b])
+            # generate proposals
+            assert len(start_scores) == len(end_scores)
+            id = np.arange(len(end_scores))
+            start_set = np.where(start_bins[id] == 1)[0]
+            end_set = np.where(end_bins[id] == 1)[0]
+            new_props = np.zeros([len(start_set) * len(end_set), 3])
+            idx = 0
+            for start in start_set:
+                end = np.where(end_set > start)[0]
+                xmin = np.ones_like(end) * start / tscale
+                xmax = end / tscale
+                xmin_score = start_scores[start]
+                xmax_score = end_scores[end]
+                clr_score = clr_confidence[end - start - 1, start]
+                reg_score = reg_confidence[end - start - 1, start]
+                score = xmin_score * xmax_score * clr_score * reg_score
+                new_props[idx:idx + len(score), :] = np.stack([score, xmin, xmax]).transpose()
+                idx += len(score)
+            new_props = new_props[:idx, :]
 
-    print("average proposal number: {}".format(avg_prop_num/len(loader.dataset)))
+            t_gen += time.time() - t0
+            t0 = time.time()
+            result[vid] = video_post_process(args, new_props, video_dict[vid])
+            #result[vid] = pool.apply_async(video_post_process, (args, new_props, video_dict[vid]))
+            t_nms += time.time() - t0
+            t0 = time.time()
 
-    return eval_results(densecap_result, prop_result, args)
+            if epoch % 100 == 0:
+                print('Epoch {}: proposal generating time = {}, soft nms time = {}'.format(epoch, t_gen, t_nms))
+
+    return dict(result)
 
 
-def eval_results(densecap_result, prop_result, args):
-
-    # write captions to json file for evaluation (densecap)
-    dense_cap_all = {'version':'VERSION 1.0', 'results':densecap_result,
-                     'external_data':{'used':'true',
-                      'details':'global_pool layer from BN-Inception pretrained from ActivityNet \
-                                 and ImageNet (https://github.com/yjxiong/anet2016-cuhk)'}}
-    with open(os.path.join('./results/', 'densecap_'+args.val_data_folder+'_'+args.id+ '.json'), 'w') as f:
-        json.dump(dense_cap_all, f)
-
-    subprocess.Popen(["python2", args.densecap_eval_file, "-s", \
-                      os.path.join('./results/', 'densecap_'+args.val_data_folder+'_' + args.id + '.json'), \
-                      "-v", "-r"] + \
-                      args.densecap_references \
-                      )
-
+def eval_results(result, args):
     # write proposals to json file for evaluation (proposal)
-    prop_all = {'version':'VERSION 1.0', 'results':prop_result,
-                'external_data':{'used':'true',
-                'details':'global_pool layer from BN-Inception pretrained from ActivityNet \
-                           and ImageNet (https://github.com/yjxiong/anet2016-cuhk)'}}
-    with open(os.path.join('./results/', 'prop_'+args.val_data_folder+'_'+args.id+ '.json'), 'w') as f:
+    prop_all = {'version': 'VERSION 1.0', 'results': result,
+                'external_data': {'used': 'false'}}
+
+    resfile = os.path.join('./results/', 'prop_' + args.test_data_folder[0] + '_' + args.id + '.json')
+    with open(resfile, 'w') as f:
         json.dump(prop_all, f)
 
-    anet_proposal = ANETproposal(args.dataset_file,
-                                 os.path.join('./results/', 'prop_'+args.val_data_folder+'_' + args.id + '.json'),
+    anet_proposal = ANETproposal(args.dataset_file, resfile,
                                  tiou_thresholds=np.linspace(0.5, 0.95, 10),
                                  max_avg_nr_proposals=100,
-                                 subset=args.val_data_folder, verbose=True, check_status=True)
+                                 subset=args.test_data_folder[0], verbose=True, check_status=False)
 
     anet_proposal.evaluate()
 
@@ -239,6 +206,7 @@ def eval_results(densecap_result, prop_result, args):
 
 
 def main():
+    global res_before_nms
 
     print('loading dataset')
     test_loader, text_proc = get_dataset(args)
@@ -246,7 +214,9 @@ def main():
     print('building model')
     model = get_model(text_proc, args)
 
-    recall_area = validate(model, test_loader, args)
+    result = inference(model, test_loader, args)
+
+    recall_area = eval_results(result, args)
 
     print('proposal recall area: {:.6f}'.format(recall_area))
 
