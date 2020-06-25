@@ -39,7 +39,7 @@ def parse_opt(train = True):
 
     if train:
         # Optimization
-        parser.add_argument('--max_epochs', default=15, type=int, help='max number of epochs to run for')
+        parser.add_argument('--max_epochs', default=10, type=int, help='max number of epochs to run for')
         parser.add_argument('--optim',default='sgd', help='what update to use? rmsprop|sgd|sgdmom|adagrad|adam')
         parser.add_argument('--learning_rate', default=0.02, type=float, help='learning rate')
         parser.add_argument('--alpha', default=0.95, type=float, help='alpha for adagrad/rmsprop/momentum/adam')
@@ -48,7 +48,7 @@ def parse_opt(train = True):
         parser.add_argument('--loss_alpha_r', default=10, type=int, help='The weight for regression loss')
         parser.add_argument('--patience_epoch', default=1, type=int, help='Epoch to wait to determine a pateau')
         parser.add_argument('--reduce_factor', default=0.5, type=float, help='Factor of learning rate reduction')
-        parser.add_argument('--grad_norm', default=1, type=float, help='Gradient clipping norm')
+        parser.add_argument('--grad_norm', default=1.5, type=float, help='Gradient clipping norm')
 
         # Evaluation/Checkpointing
         parser.add_argument('--calc_pos_neg', dest='calc_pos_neg', action='store_true')

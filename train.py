@@ -106,7 +106,7 @@ def train(epoch, model, optimizer, train_loader, bm_mask, num_pos_neg, args):
 
         total_loss.backward()
 
-        if train_iter % args.batch_size == 0:
+        if (train_iter + 1) % args.batch_size == 0:
             train_loss.append(total_loss.data.item())
 
             total_grad_norm = clip_grad_norm_(filter(lambda p: p.requires_grad, model.parameters()), args.grad_norm)
@@ -233,7 +233,7 @@ def main(args):
         # validation/save checkpoint every a few epochs
         if train_epoch % args.save_checkpoint_every == 0 or train_epoch == args.max_epochs:
             torch.save(model.module.state_dict(),
-                       os.path.join(args.checkpoint_path, 'model_epoch_{}.t7'.format(train_epoch)))
+                       os.path.join(args.checkpoint_path, 'model_epoch_{}.t7'.format(train_epoch + 1)))
 
         print('-' * 80)
         print('Epoch {} summary'.format(train_epoch + 1))

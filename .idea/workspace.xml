@@ -2,14 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="df58a654-b505-4d59-8dc1-ea05c482e2a1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/anet_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/anet_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/bmn.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/bmn.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/loss_func.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/loss_func.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/opt.py" beforeDir="false" afterPath="$PROJECT_DIR$/opt.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/results/prop_validation_.json" beforeDir="false" afterPath="$PROJECT_DIR$/results/prop_validation_.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,8 +19,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="118">
-              <caret line="169" column="12" selection-start-line="169" selection-start-column="4" selection-end-line="169" selection-end-column="12" />
+            <state relative-caret-position="4444">
+              <caret line="235" column="99" selection-start-line="235" selection-start-column="99" selection-end-line="235" selection-end-column="99" />
               <folding>
                 <element signature="e#222#234#0" expanded="true" />
               </folding>
@@ -35,8 +31,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/opt.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="145">
-              <caret line="17" column="34" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="34" />
+            <state relative-caret-position="391">
+              <caret line="27" column="55" selection-start-line="27" selection-start-column="55" selection-end-line="27" selection-end-column="55" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -59,8 +55,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/anet_dataset.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="118">
-              <caret line="256" column="60" selection-start-line="256" selection-start-column="60" selection-end-line="256" selection-end-column="60" />
+            <state relative-caret-position="-481">
+              <caret line="128" column="31" selection-start-line="128" selection-start-column="31" selection-end-line="128" selection-end-column="31" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -71,7 +67,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
+            <state relative-caret-position="-220">
               <caret line="23" column="19" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="19" />
               <folding>
                 <element signature="e#222#233#0" expanded="true" />
@@ -83,7 +79,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/bmn.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
+            <state relative-caret-position="-2420">
               <caret line="6" column="2" selection-start-line="6" selection-start-column="2" selection-end-line="6" selection-end-column="2" />
             </state>
           </provider>
@@ -100,12 +96,9 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>0.</find>
-      <find>tscale</find>
       <find>temporal_scale</find>
       <find>match_map</find>
       <find>exit</find>
-      <find>torch.save</find>
       <find>grad_norm</find>
       <find>dataset</find>
       <find>bmn_loss_func</find>
@@ -128,8 +121,11 @@
       <find>lr</find>
       <find>print</find>
       <find>print('l</find>
-      <find>lr=</find>
       <find>epo</find>
+      <find>.save</find>
+      <find>torch.save</find>
+      <find>num_wor</find>
+      <find>lr=</find>
     </findStrings>
     <replaceStrings>
       <replace>num_workers</replace>
@@ -150,11 +146,11 @@
         <option value="$PROJECT_DIR$/data/anet_dataset_backup.py" />
         <option value="$PROJECT_DIR$/data/utils.py" />
         <option value="$PROJECT_DIR$/model/bmn.py" />
-        <option value="$PROJECT_DIR$/data/anet_dataset.py" />
-        <option value="$PROJECT_DIR$/opt.py" />
-        <option value="$PROJECT_DIR$/train.py" />
         <option value="$PROJECT_DIR$/model/loss_func.py" />
         <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/data/anet_dataset.py" />
+        <option value="$PROJECT_DIR$/train.py" />
+        <option value="$PROJECT_DIR$/opt.py" />
       </list>
     </option>
   </component>
@@ -369,7 +365,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.27053824" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.23937677" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -474,26 +470,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/anet_dataset.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="118">
-          <caret line="256" column="60" selection-start-line="256" selection-start-column="60" selection-end-line="256" selection-end-column="60" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/train.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="118">
-          <caret line="169" column="12" selection-start-line="169" selection-start-column="4" selection-end-line="169" selection-end-column="12" />
-          <folding>
-            <element signature="e#222#234#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="118">
@@ -501,10 +477,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/bmn.py">
+    <entry file="file://$PROJECT_DIR$/train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="6" column="2" selection-start-line="6" selection-start-column="2" selection-end-line="6" selection-end-column="2" />
+        <state relative-caret-position="4444">
+          <caret line="235" column="99" selection-start-line="235" selection-start-column="99" selection-end-line="235" selection-end-column="99" />
+          <folding>
+            <element signature="e#222#234#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -518,9 +497,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/model/bmn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2420">
+          <caret line="6" column="2" selection-start-line="6" selection-start-column="2" selection-end-line="6" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
+        <state relative-caret-position="-220">
           <caret line="23" column="19" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="19" />
           <folding>
             <element signature="e#222#233#0" expanded="true" />
@@ -528,10 +514,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/data/anet_dataset.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-481">
+          <caret line="128" column="31" selection-start-line="128" selection-start-column="31" selection-end-line="128" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/opt.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="17" column="34" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="34" />
+        <state relative-caret-position="391">
+          <caret line="27" column="55" selection-start-line="27" selection-start-column="55" selection-end-line="27" selection-end-column="55" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>

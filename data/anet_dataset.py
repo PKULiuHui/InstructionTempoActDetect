@@ -108,6 +108,7 @@ class ANetDataset(Dataset):
 
         self.sample_list = [None] * nvideo  # list of list for data samples
         idx_out, idx_in, idx_last = 0, 0, 0
+        longs = 0
         for vid, val in raw_data.items():
             annotations = val['annotations']
             for split_path in split_paths:
@@ -117,6 +118,7 @@ class ANetDataset(Dataset):
                         start[ind], end[ind] = ann['segment']
                         idx_in += 1
                     start, end = map(lambda x: np.clip( (x - 0.5) / dur_corr[vid][0], 0, 1), [start, end])
+                    longs += np.sum(end - start > 0.5)
 
                     assert idx_in - idx_last == len(annotations)
                     self.sample_list[idx_out] = (
@@ -124,6 +126,7 @@ class ANetDataset(Dataset):
                         sentence_idx[idx_last:idx_in, :])
                     idx_out += 1
                     idx_last = idx_in
+        print('long segments(>50% of total length) = ', longs)
 
     def __getitem__(self, index):
         video_prefix, nframe, start, end, sentence = self.sample_list[index]
