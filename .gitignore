@@ -4,6 +4,7 @@ tools/densevid_eval/coco-caption/pycocoevalcap/meteor/data
 dataset/*
 checkpoint/*
 *_backup.py
+tmp.py
 
 # .idea
 .idea

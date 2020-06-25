@@ -22,7 +22,6 @@ from opt import parse_opt
 
 args = parse_opt(train=False)
 args.batch_size = 1
-args.num_workers = 3
 print(args)
 
 
@@ -161,7 +160,8 @@ def inference(model, loader, args):
             new_props = np.zeros([len(start_set) * len(end_set), 3])
             idx = 0
             for start in start_set:
-                end = np.where(end_set > start)[0]
+                criter = lambda x: x > start and x < start + args.max_duration
+                end = end_set[np.where(np.vectorize(criter)(end_set))[0]]
                 xmin = np.ones_like(end) * start / tscale
                 xmax = end / tscale
                 xmin_score = start_scores[start]

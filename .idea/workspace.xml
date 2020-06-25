@@ -2,12 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="df58a654-b505-4d59-8dc1-ea05c482e2a1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cfgs/yc2.yml" beforeDir="false" afterPath="$PROJECT_DIR$/cfgs/yc2.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/anet_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/anet_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/action_prop_dense_cap.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/bmn.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/bmn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/loss_func.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/loss_func.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opt.py" beforeDir="false" afterPath="$PROJECT_DIR$/opt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/prop_validation_.json" beforeDir="false" afterPath="$PROJECT_DIR$/results/prop_validation_.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
     </list>
@@ -22,22 +23,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="22">
-              <caret line="168" column="30" selection-start-line="168" selection-start-column="30" selection-end-line="168" selection-end-column="30" />
+            <state relative-caret-position="118">
+              <caret line="169" column="12" selection-start-line="169" selection-start-column="4" selection-end-line="169" selection-end-column="12" />
               <folding>
                 <element signature="e#222#234#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="111" selection-start-line="111" selection-end-line="111" />
-              <folding>
-                <element signature="e#222#233#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -46,8 +35,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/opt.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="48" column="57" lean-forward="true" selection-start-line="48" selection-start-column="57" selection-end-line="48" selection-end-column="57" />
+            <state relative-caret-position="145">
+              <caret line="17" column="34" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="34" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -56,10 +45,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data/utils.py">
+        <entry file="file://$PROJECT_DIR$/model/loss_func.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="298">
-              <caret line="52" selection-start-line="52" selection-end-line="52" />
+            <state relative-caret-position="22">
+              <caret line="29" column="4" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
+              <folding>
+                <element signature="e#24#42#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -67,8 +59,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/anet_dataset.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="132">
-              <caret line="145" column="24" selection-start-line="145" selection-start-column="24" selection-end-line="145" selection-end-column="24" />
+            <state relative-caret-position="118">
+              <caret line="256" column="60" selection-start-line="256" selection-start-column="60" selection-end-line="256" selection-end-column="60" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -77,10 +69,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="176">
+              <caret line="23" column="19" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="19" />
+              <folding>
+                <element signature="e#222#233#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/bmn.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="314">
-              <caret line="131" column="26" selection-start-line="131" selection-start-column="26" selection-end-line="131" selection-end-column="26" />
+            <state relative-caret-position="88">
+              <caret line="6" column="2" selection-start-line="6" selection-start-column="2" selection-end-line="6" selection-end-column="2" />
             </state>
           </provider>
         </entry>
@@ -96,41 +100,42 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>collate</find>
-      <find>wrapper_segment_iou</find>
-      <find>num_sam</find>
-      <find>gated_mask</find>
-      <find>sampling</find>
-      <find>dataset_</find>
-      <find>batch</find>
-      <find>dataset</find>
-      <find>args.batch_size</find>
-      <find>num_w</find>
-      <find>print</find>
-      <find>time</find>
-      <find>opt</find>
-      <find>for data</find>
-      <find>self.sa</find>
-      <find>.csv</find>
-      <find>df</find>
+      <find>0.</find>
+      <find>tscale</find>
+      <find>temporal_scale</find>
+      <find>match_map</find>
       <find>exit</find>
-      <find>multi</find>
-      <find>res_before</find>
-      <find>kernel_lis</find>
-      <find>_data_</find>
-      <find>id</find>
-      <find>multipro</find>
-      <find>multiprocessing</find>
-      <find>pool</find>
+      <find>torch.save</find>
+      <find>grad_norm</find>
+      <find>dataset</find>
+      <find>bmn_loss_func</find>
+      <find>BM_MASK</find>
+      <find>optimi</find>
+      <find>backward</find>
+      <find>args.learning_rate</find>
+      <find>clip_grad_norm</find>
+      <find>learning</find>
       <find>args.</find>
-      <find>score</find>
-      <find>mp.</find>
-      <find>dense</find>
+      <find>start_from</find>
+      <find>random.</find>
+      <find>1185</find>
+      <find>pos_neg</find>
+      <find>distri</find>
+      <find>store</find>
+      <find>bm</find>
+      <find>pos_and_neg_num</find>
+      <find>epoch</find>
+      <find>lr</find>
+      <find>print</find>
+      <find>print('l</find>
+      <find>lr=</find>
+      <find>epo</find>
     </findStrings>
     <replaceStrings>
       <replace>num_workers</replace>
       <replace>args</replace>
       <replace>prop</replace>
+      <replace>num_pos_neg</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -143,13 +148,13 @@
         <option value="$PROJECT_DIR$/model/transformer.py" />
         <option value="$PROJECT_DIR$/cfgs/opt.py" />
         <option value="$PROJECT_DIR$/data/anet_dataset_backup.py" />
-        <option value="$PROJECT_DIR$/model/bmn.py" />
-        <option value="$PROJECT_DIR$/model/loss_func.py" />
         <option value="$PROJECT_DIR$/data/utils.py" />
-        <option value="$PROJECT_DIR$/train.py" />
+        <option value="$PROJECT_DIR$/model/bmn.py" />
         <option value="$PROJECT_DIR$/data/anet_dataset.py" />
-        <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/opt.py" />
+        <option value="$PROJECT_DIR$/train.py" />
+        <option value="$PROJECT_DIR$/model/loss_func.py" />
+        <option value="$PROJECT_DIR$/test.py" />
       </list>
     </option>
   </component>
@@ -167,7 +172,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -183,12 +187,18 @@
             <path>
               <item name="InstructionTempoActDetect" type="b2602c69:ProjectViewProjectNode" />
               <item name="InstructionTempoActDetect" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="InstructionTempoActDetect" type="b2602c69:ProjectViewProjectNode" />
+              <item name="InstructionTempoActDetect" type="462c0819:PsiDirectoryNode" />
               <item name="tools" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -212,7 +222,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test">
+  <component name="RunManager" selected="Python.train">
     <configuration name="anet_dataset" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Final" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -255,7 +265,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="opt" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="loss_func" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Final" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -263,11 +273,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/model" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/opt.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/model/loss_func.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -289,27 +299,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="train (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Final" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/train.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -341,10 +330,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.test" />
-        <item itemvalue="Python.opt" />
+        <item itemvalue="Python.train" />
         <item itemvalue="Python.anet_dataset" />
-        <item itemvalue="Python.train (1)" />
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.loss_func" />
         <item itemvalue="Python.bmn" />
       </list>
     </recent_temporary>
@@ -362,22 +351,32 @@
     </task>
     <servers />
   </component>
+  <component name="TodoView" selected-index="2">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15059446" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16644649" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.21954674" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.27053824" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4980185" weight="0.27903682" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5019815" side_tool="true" weight="0.3286119" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.3286119" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -408,11 +407,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/train_backup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-132" />
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/train_backup.py" />
     <entry file="file://$PROJECT_DIR$/model/action_prop_dense_cap.py" />
     <entry file="file://$PROJECT_DIR$/model/transformer.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -420,16 +415,6 @@
           <caret line="115" column="15" selection-start-line="115" selection-start-column="15" selection-end-line="116" selection-end-column="15" />
           <folding>
             <element signature="e#222#234#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/loss_func.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
-          <folding>
-            <element signature="e#24#42#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -444,36 +429,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/bmn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="131" column="26" selection-start-line="131" selection-start-column="26" selection-end-line="131" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/anet_dataset.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="145" column="24" selection-start-line="145" selection-start-column="24" selection-end-line="145" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test_backup.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/train.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="168" column="30" selection-start-line="168" selection-start-column="30" selection-end-line="168" selection-end-column="30" />
-          <folding>
-            <element signature="e#222#234#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/test_backup.py" />
     <entry file="file://$PROJECT_DIR$/tools/eval_proposal_anet.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="946">
@@ -494,27 +450,88 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test.py">
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.3/system/python_stubs/1508949510/errno.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/modules/conv.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="111" selection-start-line="111" selection-end-line="111" />
+        <state relative-caret-position="168">
+          <caret line="201" selection-start-line="201" selection-end-line="201" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/functional.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1026">
+          <caret line="667" selection-start-line="667" selection-end-line="667" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/numpy/lib/npyio.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="166">
+          <caret line="442" selection-start-line="442" selection-end-line="442" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/anet_dataset.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="256" column="60" selection-start-line="256" selection-start-column="60" selection-end-line="256" selection-end-column="60" />
           <folding>
-            <element signature="e#222#233#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="169" column="12" selection-start-line="169" selection-start-column="4" selection-end-line="169" selection-end-column="12" />
+          <folding>
+            <element signature="e#222#234#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data/utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="52" selection-start-line="52" selection-end-line="52" />
+        <state relative-caret-position="118">
+          <caret line="33" column="25" selection-start-line="33" selection-start-column="25" selection-end-line="33" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/bmn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="6" column="2" selection-start-line="6" selection-start-column="2" selection-end-line="6" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/loss_func.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="29" column="4" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
+          <folding>
+            <element signature="e#24#42#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="23" column="19" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="19" />
+          <folding>
+            <element signature="e#222#233#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/opt.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="48" column="57" lean-forward="true" selection-start-line="48" selection-start-column="57" selection-end-line="48" selection-end-column="57" />
+        <state relative-caret-position="145">
+          <caret line="17" column="34" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="34" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>

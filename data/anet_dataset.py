@@ -54,29 +54,30 @@ class ANetDataset(Dataset):
         super(ANetDataset, self).__init__()
         self.is_test = test
 
-        self.temporal_scale = args.temporal_scale  # 100
-        self.temporal_gap = 1. / self.temporal_scale
-        match_map = np.zeros([self.temporal_scale, self.temporal_scale, 2])
-        for dur in range(1, self.temporal_scale + 1):
-            for beg in range(self.temporal_scale):
+        self.tscale = args.temporal_scale  # 100?
+        self.maxdur = args.max_duration
+        self.temporal_gap = 1. / self.tscale
+        match_map = np.zeros([self.maxdur, self.tscale, 2])
+        for dur in range(1, self.maxdur + 1):
+            for beg in range(self.tscale):
                 xmin = self.temporal_gap * beg
                 xmax = xmin + self.temporal_gap * dur
                 match_map[dur - 1, beg, :] = np.array([xmin, xmax])
         self.match_map = np.reshape(match_map, [-1, 2])  # # [0,1] [1,2] [2,3].....[99,199]   # duration x start
-        self.anchor_xmin = [self.temporal_gap * (i - 0.5) for i in range(self.temporal_scale)]
-        self.anchor_xmax = [self.temporal_gap * (i + 0.5) for i in range(1, self.temporal_scale + 1)]
+        self.anchor_xmin = [self.temporal_gap * (i - 0.5) for i in range(self.tscale)]
+        self.anchor_xmax = [self.temporal_gap * (i + 0.5) for i in range(1, self.tscale + 1)]
 
         image_path = args.feature_root
         dur_file = args.dur_file
-        last_frame_t = dict()
+        dur_corr = dict()
         sampling_sec = 0.5
         with open(dur_file) as f:
             for line in f:
                 name, dur, frame = [l.strip() for l in line.split(',')]
                 dur, frame = float(dur), float(frame)
                 interval = dur * np.ceil(frame / dur * sampling_sec) / frame  # sampling interval, \approx 0.5s
-                last_frame_t[name] = (int(dur / interval) * interval, np.ceil(dur / interval))  # time of last frame
-                # TODO: not exactly correspond to the data
+                dur_corr[name] = ( int(dur / interval) * interval, int((dur + 0.305) / interval))  # corrected duration
+                # TODO: Not exactly correspond to the data
 
         split_paths = []
         for split_dev in split:
@@ -115,11 +116,11 @@ class ANetDataset(Dataset):
                     for ind, ann in enumerate(annotations):
                         start[ind], end[ind] = ann['segment']
                         idx_in += 1
-                    start, end = map(lambda x: np.clip(x / last_frame_t[vid][0], 0, 1), [start, end])
+                    start, end = map(lambda x: np.clip( (x - 0.5) / dur_corr[vid][0], 0, 1), [start, end])
 
                     assert idx_in - idx_last == len(annotations)
                     self.sample_list[idx_out] = (
-                        os.path.join(split_path, vid), last_frame_t[vid][1], start, end,
+                        os.path.join(split_path, vid), dur_corr[vid][1], start, end,
                         sentence_idx[idx_last:idx_in, :])
                     idx_out += 1
                     idx_last = idx_in
@@ -129,12 +130,13 @@ class ANetDataset(Dataset):
         resnet_feat = torch.from_numpy(
             np.load(video_prefix + '_resnet.npy')).float()
         bn_feat = torch.from_numpy(np.load(video_prefix + '_bn.npy')).float()
-        # print(bn_feat.shape, nframe) not exactly the same
+        #if bn_feat.shape[0] != nframe:
+        #    print(bn_feat.shape, nframe) #not exactly the same
 
         assert resnet_feat.size(0) == bn_feat.size(0)
 
         img_feat = torch.cat((resnet_feat, bn_feat), dim=1).float()
-        img_feat = self.poolData(img_feat).transpose(1, 0)
+        img_feat = self.poolData(img_feat, num_prop=self.tscale).transpose(1, 0)
         x, y = sentence.shape
         sentence = torch.cat([sentence, torch.zeros(20 - x, y).long()], axis=0)
 
@@ -145,11 +147,13 @@ class ANetDataset(Dataset):
             vid = os.path.split(video_prefix)[-1]
             return vid, sentence, img_feat
 
-    def poolData(self, data, num_prop=100, num_bin=1, num_sample_bin=3, pool_type="mean"):
+    def poolData(self, data, num_prop, num_bin=1, num_sample_bin=3, pool_type="mean"):
+        feat_dim = data.shape[1]
+
         # TODO -- be more exact, and perhaps move this to preprocessing
         if len(data) == 1:
             video_feature = np.stack([data] * num_prop)
-            video_feature = np.reshape(video_feature, [num_prop, 400])
+            video_feature = np.reshape(video_feature, [num_prop, feat_dim])
             return video_feature
 
         st = 1 / len(data)
@@ -157,7 +161,7 @@ class ANetDataset(Dataset):
         f = scipy.interpolate.interp1d(x, data, axis=0)
 
         video_feature = []
-        zero_sample = np.zeros(num_bin * 400, dtype=np.float32)
+        zero_sample = np.zeros(num_bin * feat_dim, dtype=np.float32)
         tmp_anchor_xmin = [1.0 / num_prop * i for i in range(num_prop)]
         tmp_anchor_xmax = [1.0 / num_prop * i for i in range(1, num_prop + 1)]
 
@@ -195,7 +199,7 @@ class ANetDataset(Dataset):
         for tmp_start, tmp_end in zip(start, end):
             gt_bbox.append([tmp_start, tmp_end])
             tmp_gt_iou_map = iou_with_anchors(self.match_map[:, 0], self.match_map[:, 1], tmp_start, tmp_end)
-            tmp_gt_iou_map = np.reshape(tmp_gt_iou_map, [self.temporal_scale, self.temporal_scale])
+            tmp_gt_iou_map = np.reshape(tmp_gt_iou_map, [self.maxdur, self.tscale])
             gt_iou_map.append(tmp_gt_iou_map)
         gt_iou_map = np.array(gt_iou_map)
         gt_iou_map = np.max(gt_iou_map, axis=0)
@@ -228,12 +232,37 @@ class ANetDataset(Dataset):
 
 if __name__ == '__main__':
     import opt
+    import time
+    from model.bmn import BMN
+    from model.loss_func import *
 
     args = opt.parse_opt()
     args.dataset_file = os.path.join('..', args.dataset_file)
     args.feature_root = os.path.join('..', args.feature_root)
     args.dur_file = os.path.join('..', args.dur_file)
     text_proc, raw_data = get_vocab_and_sentences(args.dataset_file, args.max_sentence_len)
-    train_dataset = ANetDataset(args, args.train_data_folder, text_proc, raw_data)
+    train_dataset = ANetDataset(args, args.train_data_folder, text_proc, raw_data, test=False)
+
+    torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
+    torch.cuda.manual_seed_all(args.seed)
+    '''model = BMN(args)
+    model = torch.nn.DataParallel(model).cuda()
+    optimizer = torch.optim.SGD(filter(lambda p: p.requires_grad, model.parameters()),
+                                args.learning_rate, weight_decay=1e-5, momentum=args.alpha, nesterov=True)'''
+    bm_mask = get_mask(args.temporal_scale, args.max_duration)
+
+    num_pos_neg = [0 for i in range(7)]
+    for i in range(len(train_dataset)):
+        sentence, img_feat, label_confidence, label_start, label_end = train_dataset[i]
+
+        num_pos_neg[0:3] = add_pem_reg_num(label_confidence, bm_mask, num_pos_neg[0:3])
+        num_pos_neg[3:5] = add_pem_cls_num(label_confidence, bm_mask, num_pos_neg[3:5])
+        num_pos_neg[5:7] = add_tem_num(label_start, label_end, num_pos_neg[5:7])
+
+    np.savetxt('../results/num_pos_neg.txt', np.array(num_pos_neg))
+    exit(0)
+    t = time.time()
     for i, x in enumerate(train_dataset):
-        if i >= 2: break
+        if i >= 100: break
+    print(time.time() - t)
