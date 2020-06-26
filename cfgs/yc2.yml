@@ -1,5 +1,5 @@
 # dataset specific settings for yc2
 dataset: "yc2"
-dataset_file: "./dataset/yc2/yc2_annotations_trainval.json"
-feature_root: "./dataset/"
-dur_file: "./dataset/yc2/yc2_duration_frame.csv"
+dataset_file: "./data/yc2/yc2_annotations_trainval.json"
+feature_root: "./data/"
+dur_file: "./data/yc2/yc2_duration_frame.csv"
