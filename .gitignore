@@ -8,7 +8,7 @@ tmp.py
 
 # .idea
 .idea
-.idea/*
+.idea/*.xml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
